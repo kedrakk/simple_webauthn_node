@@ -1,0 +1,103 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple web authn</title>
+    <!-- <script src="https://unpkg.com/@simplewebauthn/browser/dist/bundle/index.umd.min.js"></script> -->
+    <script src="index.umd.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <p>Welcome from simple webauthn</p>
+    <div>
+        <div style="display: block;">
+            <section>
+                <h2>Registering</h2>
+                <button id="btnRegister">Register Now</button>
+                <div id="regResult"></div>
+            </section>
+            <hr>
+            <section>
+                <h2>Authenticating</h2>
+                <span id="selected-User"></span>
+                <button id="btnAuthenticate">Authenticate Now</button>
+                <div id="authResult"></div>
+            </section>
+        </div>
+    </div>
+    <script>
+        const { startRegistration } = SimpleWebAuthnBrowser;
+        const { startAuthentication } = SimpleWebAuthnBrowser;
+
+        var resultElement = document.getElementById('regResult');
+        var resultAuthElement = document.getElementById('authResult');
+
+        document.querySelector("#btnRegister").addEventListener('click', async () => {
+            const resp = await fetch('/generate-registration-options');
+            const responseData = await resp.json();
+
+            if (responseData && responseData.challenge) {
+                console.log(responseData.challenge);
+                
+                let attResp;
+                try {
+                    attResp = await startRegistration(responseData);
+                } catch (error) {
+                    if (error.name === 'InvalidStateError') {
+                        resultElement.innerText = 'Error: Authenticator was probably already registered by user';
+                    } else {
+                        resultElement.innerText = error;
+                    }
+                    throw error;
+                }
+
+                const verificationResp = await fetch('/verify-registration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(attResp),
+                });
+                const verificationJSON = await verificationResp.json();
+                if (verificationJSON && verificationJSON.verified) {
+                    resultElement.innerHTML = 'Success!';
+                } else {
+                    resultElement.innerHTML = `Oh no, something went wrong! Response: <pre>${JSON.stringify(
+                        verificationJSON,
+                    )}</pre>`;
+                }
+            }
+        });
+
+        document.querySelector("#btnAuthenticate").addEventListener('click', async () => {
+            const resp = await fetch('/generate-authentication-options');
+            const responseData = await resp.json();
+            let asseResp;
+            try {
+                asseResp = await startAuthentication(responseData);
+            } catch (error) {
+                resultAuthElement.innerText = error;
+                throw error;
+            }
+
+            const verificationResp = await fetch('/verify-authentication', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(asseResp),
+            });
+            const verificationJSON = await verificationResp.json();
+            if (verificationJSON && verificationJSON.verified) {
+                resultAuthElement.innerHTML = 'Success!';
+            } else {
+                resultAuthElement.innerHTML = `Oh no, something went wrong! Response: <pre>${JSON.stringify(
+                    verificationJSON,
+                )}</pre>`;
+            }
+        });
+    </script>
+</body>
+
+</html>
