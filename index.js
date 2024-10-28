@@ -224,10 +224,6 @@ app.get("/", function (req, res) {
     res.sendFile(__dirname + '/front/index.html');
 });
 
-app.get('/index.umd.min.js', function (req, res) {
-    res.sendFile(__dirname + '/front/index.umd.min.js');
-});
-
 mongoose.connect(mongoDBURL)
     .then(() => {
         console.log("Mongo DB connected");
