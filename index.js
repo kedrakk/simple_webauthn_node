@@ -12,7 +12,7 @@ const { passkeyRoutes } = require('./routes/passKeysRoutes');
 
 const app = express();
 
-const PORT = process.env.ServerPORT;
+const PORT = process.env.ServerPORT || 3000;
 const mongoDBURL = process.env.MongoDBURL;
 
 app.use(express.json());
