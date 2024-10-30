@@ -5,8 +5,8 @@ const session = require('express-session');
 const { generateRegistrationOptions,
     verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require('@simplewebauthn/server');
 const mongoose = require('mongoose');
-const UserModel = require('../TestNodeSimpleWebAuthn/model/userModel');
-const PassKeyModel = require('../TestNodeSimpleWebAuthn/model/passKeyModel');
+const UserModel = require('./model/userModel');
+const PassKeyModel = require('./model/passKeyModel');
 const { userRoutes } = require('./routes/userRoutes');
 const { passkeyRoutes } = require('./routes/passKeysRoutes');
 
