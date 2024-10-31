@@ -32,9 +32,9 @@ app.use('/users', userRoutes);
 app.use('/pass-keys', passkeyRoutes);
 
 const rpName = 'SimpleWebAuthn Example';
-const rpID = 'localhost';
-const origin = `http://${rpID}:${port}`;
-const expectedOrigin = `http://${rpID}:${port}`;
+const rpID = 'simple-webauthn.onrender.com';//'localhost';
+const origin = 'https://simple-webauthn.onrender.com';//`http://${rpID}:${port}`;
+const expectedOrigin = 'https://simple-webauthn.onrender.com';//`http://${rpID}:${port}`;
 const userId = 123;
 const userEmail = "testuser1@gmail.com";
 
