@@ -12,7 +12,7 @@ const { passkeyRoutes } = require('./routes/passKeysRoutes');
 
 const app = express();
 
-const PORT = process.env.ServerPORT || 3000;
+const port = process.env.PORT || 3000;
 const mongoDBURL = process.env.MongoDBURL;
 
 app.use(express.json());
@@ -33,8 +33,8 @@ app.use('/pass-keys', passkeyRoutes);
 
 const rpName = 'SimpleWebAuthn Example';
 const rpID = 'localhost';
-const origin = `http://${rpID}:${PORT}`;
-const expectedOrigin = `http://${rpID}:${PORT}`;
+const origin = `http://${rpID}:${port}`;
+const expectedOrigin = `http://${rpID}:${port}`;
 const userId = 123;
 const userEmail = "testuser1@gmail.com";
 
@@ -227,8 +227,8 @@ app.get("/", function (req, res) {
 mongoose.connect(mongoDBURL)
     .then(() => {
         console.log("Mongo DB connected");
-        app.listen(PORT, function () {
-            console.log(`App is listening on port:${PORT}`);
+        app.listen(port, function () {
+            console.log(`App is listening on port:${port}`);
         });
     }).catch((error) => {
         console.log(error);
