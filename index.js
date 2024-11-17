@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path');
 const session = require('express-session');
 const { generateRegistrationOptions,
     verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require('@simplewebauthn/server');
@@ -16,6 +17,7 @@ const port = process.env.PORT || 3000;
 const mongoDBURL = process.env.MongoDBURL;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'front')));
 app.use(
     session({
         secret: 'secret123',
@@ -220,8 +222,21 @@ app.post('/verify-authentication', async (req, res) => {
     res.send({ verified });
 });
 
-app.get("/", function (req, res) {
-    res.sendFile(__dirname + '/front/index.html');
+// app.get("/", function (req, res) {
+//     res.sendFile(__dirname + '/front/index.html');
+// });
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'front', 'index.html'));
+});
+
+app.get('/:page', (req, res) => {
+    const page = req.params.page;
+    const pagePath = path.join(__dirname, 'front', `${page}.html`);
+    res.sendFile(pagePath, err => {
+        if (err) {
+            res.status(404).send('404 Page Not Found');
+        }
+    });
 });
 
 mongoose.connect(mongoDBURL)
