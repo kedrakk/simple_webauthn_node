@@ -30,6 +30,20 @@ app.use(
     }),
 );
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// Routes
+const indexRoutes = require('./routes/frontend/index');
+const authRoutes = require('./routes/frontend/auth');
+const settingsRoutes = require('./routes/frontend/settings');
+const notFoundRoute = require('./routes/frontend/notFound');
+
+app.use('/', indexRoutes);
+app.use('/', authRoutes);
+app.use('/', settingsRoutes);
+app.use(notFoundRoute);
+
 app.use('/users', userRoutes);
 app.use('/pass-keys', passkeyRoutes);
 
@@ -225,19 +239,19 @@ app.post('/verify-authentication', async (req, res) => {
 // app.get("/", function (req, res) {
 //     res.sendFile(__dirname + '/front/index.html');
 // });
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'front', 'index.html'));
-});
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'front', 'index.html'));
+// });
 
-app.get('/:page', (req, res) => {
-    const page = req.params.page;
-    const pagePath = path.join(__dirname, 'front', `${page}.html`);
-    res.sendFile(pagePath, err => {
-        if (err) {
-            res.status(404).send('404 Page Not Found');
-        }
-    });
-});
+// app.get('/:page', (req, res) => {
+//     const page = req.params.page;
+//     const pagePath = path.join(__dirname, 'front', `${page}.html`);
+//     res.sendFile(pagePath, err => {
+//         if (err) {
+//             res.status(404).send('404 Page Not Found');
+//         }
+//     });
+// });
 
 mongoose.connect(mongoDBURL)
     .then(() => {
