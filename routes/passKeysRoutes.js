@@ -1,5 +1,5 @@
 const express = require('express');
-const PassKeyModel = require('../model/passKeyModel');
+const PassKeyModel = require('../model/passKeyModel.js');
 
 const passkeyRoutes = express.Router();
 

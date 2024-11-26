@@ -54,39 +54,39 @@ const expectedOrigin = 'https://simple-webauthn.onrender.com';//`http://${rpID}:
 const userId = 123;
 const userEmail = "testuser1@gmail.com";
 
-app.get('/generate-registration-options', async (req, res) => {
+// app.get('/generate-registration-options', async (req, res) => {
 
-    const mongooseUser = await UserModel.findOne({ email: userEmail });
-    const user = {
-        id: mongooseUser.userId,
-        username: mongooseUser.username,
-        email: mongooseUser.email,
-        devices: [],
-    };
+//     const mongooseUser = await UserModel.findOne({ email: userEmail });
+//     const user = {
+//         id: mongooseUser.userId,
+//         username: mongooseUser.username,
+//         email: mongooseUser.email,
+//         devices: [],
+//     };
 
-    let opts = {
-        rpName: rpName,
-        rpID,
-        userName: user.username,
-        timeout: 60000,
-        attestationType: 'none',
-        excludeCredentials: user.devices.map((dev) => ({
-            id: dev.credentialID,
-            type: 'public-key',
-            transports: dev.transports,
-        })),
-        authenticatorSelection: {
-            residentKey: 'discouraged',
-            userVerification: 'preferred',
-        },
-        supportedAlgorithmIDs: [-7, -257], //Support the two most common algorithms: ES256, and RS256
-    }
+//     let opts = {
+//         rpName: rpName,
+//         rpID,
+//         userName: user.username,
+//         timeout: 60000,
+//         attestationType: 'none',
+//         excludeCredentials: user.devices.map((dev) => ({
+//             id: dev.credentialID,
+//             type: 'public-key',
+//             transports: dev.transports,
+//         })),
+//         authenticatorSelection: {
+//             residentKey: 'discouraged',
+//             userVerification: 'preferred',
+//         },
+//         supportedAlgorithmIDs: [-7, -257], //Support the two most common algorithms: ES256, and RS256
+//     }
 
-    const options = await generateRegistrationOptions(opts);
-    req.session.currentChallenge = options.challenge;
-    req.session.webAuthnUserID = options.user.id;
-    res.send(options);
-});
+//     const options = await generateRegistrationOptions(opts);
+//     req.session.currentChallenge = options.challenge;
+//     req.session.webAuthnUserID = options.user.id;
+//     res.send(options);
+// });
 
 app.post('/verify-registration', async (req, res) => {
 
