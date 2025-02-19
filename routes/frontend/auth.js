@@ -19,6 +19,10 @@ router.post('/login', (req, res) => {
     res.send('Login submitted!');
 });
 
+router.get('/register', (req, res) => {
+    res.render('layout', { title: 'Register', view: `register` });
+});
+
 router.get('/generate-registration-options', async (req, res) => {
 
     const mongooseUser = await UserModel.findOne({ email: userEmail });
