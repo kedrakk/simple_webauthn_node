@@ -4,8 +4,6 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const { userRoutes } = require('./routes/userRoutes');
-const { passkeyRoutes } = require('./routes/passKeysRoutes');
 const prismaClient = require('./client');
 const constData = require('./const.js');
 

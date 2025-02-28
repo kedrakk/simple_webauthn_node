@@ -1,6 +1,6 @@
 const WEBPORT = process.env.PORT || 8000;
-const RPID = "localhost"; //'simple-webauthn.onrender.com';//'localhost';
-const RPORIGINURL = "http://localhost"; //'https://simple-webauthn.onrender.com';
+const RPID = "localhost"; 
+const RPORIGINURL = "http://localhost"; 
 const RPName = 'SimpleWebAuthn Example';
 
 module.exports = {
