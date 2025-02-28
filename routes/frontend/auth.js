@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const UserModel = require('../../model/userModel.js');
 const { generateRegistrationOptions,
     verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require('@simplewebauthn/server');
 const prismaClient = require('../../client.js');
 const constData = require('../../const.js');
 const crypto = require('crypto');
 var flash = require('connect-flash');
-const { error, log } = require('console');
 
 const prisma = prismaClient;
 

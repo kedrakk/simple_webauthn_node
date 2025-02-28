@@ -47,9 +47,7 @@ async function main() {
     app.use('/', authRoutes);
     app.use('/', settingsRoutes);
     app.use(notFoundRoute);
-
-    app.use('/users', userRoutes);
-    app.use('/pass-keys', passkeyRoutes);
+    
     app.listen(PORT, () => {
         console.info(`Server started on port: ${PORT}`);
     });
