@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "db:migrate": "npx prisma migrate dev --name user-entity --create-only && npx prisma generate",
     "db:push": "npx prisma db push"
@@ -22,10 +21,7 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "hi-base32": "^0.5.1",
-    "mongoose": "^8.5.1",
-    "nodemon": "^3.1.4"
+    "express-session": "^1.18.0"
   },
   "devDependencies": {
     "prisma": "^6.4.1"

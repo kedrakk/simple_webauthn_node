@@ -4,7 +4,6 @@ npm/
 coverage/
 .DS_Store
 docs/
-.env
 .idea
 example/*.key
 example/*.crt

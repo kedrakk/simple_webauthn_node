@@ -36,10 +36,10 @@ async function main() {
     app.set('view engine', 'ejs');
 
     // Routes
-    const indexRoutes = require('./routes/frontend/index');
-    const authRoutes = require('./routes/frontend/auth');
-    const settingsRoutes = require('./routes/frontend/settings');
-    const notFoundRoute = require('./routes/frontend/notFound');
+    const indexRoutes = require('./routes/index');
+    const authRoutes = require('./routes/auth.js');
+    const settingsRoutes = require('./routes/settings.js');
+    const notFoundRoute = require('./routes/notFound.js');
 
     app.use('/', indexRoutes);
     app.use('/', authRoutes);
