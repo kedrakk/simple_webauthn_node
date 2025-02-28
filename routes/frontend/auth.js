@@ -116,35 +116,40 @@ router.post('/api/generate-registration-options', async (req, res) => {
     try {
         const { email } = req.body;
         const prismaUser = await prisma.user.findUnique({ where: { email } });
-        const user = {
-            id: prismaUser.id,
-            username: prismaUser.name,
-            email: prismaUser.email,
-            devices: [],
-        };
-
-        let opts = {
-            rpName: rpName,
-            rpID,
-            userName: user.username,
-            timeout: 60000,
-            attestationType: 'none',
-            excludeCredentials: user.devices.map((dev) => ({
-                id: dev.credentialID,
-                type: 'public-key',
-                transports: dev.transports,
-            })),
-            authenticatorSelection: {
-                residentKey: 'discouraged',
-                userVerification: 'preferred',
-            },
-            supportedAlgorithmIDs: [-7, -257],
+        if (!prismaUser) {
+            return res.status(400).send({ error: "No user with that email exists" });
         }
+        else {
+            const user = {
+                id: prismaUser.id,
+                username: prismaUser.name,
+                email: prismaUser.email,
+                devices: [],
+            };
 
-        const options = await generateRegistrationOptions(opts);
-        req.session.currentChallenge = options.challenge;
-        req.session.webAuthnUserID = options.user.id;
-        res.send(options);
+            let opts = {
+                rpName: rpName,
+                rpID,
+                userName: user.username,
+                timeout: 60000,
+                attestationType: 'none',
+                excludeCredentials: user.devices.map((dev) => ({
+                    id: dev.credentialID,
+                    type: 'public-key',
+                    transports: dev.transports,
+                })),
+                authenticatorSelection: {
+                    residentKey: 'discouraged',
+                    userVerification: 'preferred',
+                },
+                supportedAlgorithmIDs: [-7, -257],
+            }
+
+            const options = await generateRegistrationOptions(opts);
+            req.session.currentChallenge = options.challenge;
+            req.session.webAuthnUserID = options.user.id;
+            res.send(options);
+        }
     } catch (error) {
         res.status(400).send({ error: error.message });
     }
@@ -227,25 +232,30 @@ router.post('/api/verify-registration', async (req, res) => {
 router.post('/api/generate-authentication-options', async (req, res) => {
     const { email } = req.body;
     const prismaUser = await prisma.user.findUnique({ where: { email } });
-    const user = {
-        id: prismaUser.id,
-        username: prismaUser.name,
-        email: prismaUser.email,
-        devices: prismaUser.devices,
-    };
-    const opts = {
-        timeout: 60000,
-        allowCredentials: user.devices.map((dev) => ({
-            id: dev.credentialID,
-            type: 'public-key',
-            transports: dev.transports,
-        })),
-        userVerification: 'preferred',
-        rpID,
-    };
-    const options = await generateAuthenticationOptions(opts);
-    req.session.currentChallenge = options.challenge;
-    res.send(options);
+    if (!prismaUser) {
+        return res.status(400).send({ error: "No user with that email exists" });
+    }
+    else {
+        const user = {
+            id: prismaUser.id,
+            username: prismaUser.name,
+            email: prismaUser.email,
+            devices: prismaUser.devices,
+        };
+        const opts = {
+            timeout: 60000,
+            allowCredentials: user.devices.map((dev) => ({
+                id: dev.credentialID,
+                type: 'public-key',
+                transports: dev.transports,
+            })),
+            userVerification: 'preferred',
+            rpID,
+        };
+        const options = await generateAuthenticationOptions(opts);
+        req.session.currentChallenge = options.challenge;
+        res.send(options);
+    }
 });
 
 router.post('/api/verify-authentication', async (req, res) => {
