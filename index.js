@@ -6,6 +6,11 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const prismaClient = require('./client');
 const constData = require('./const.js');
+// Routes
+const indexRoutes = require('./routes/index');
+const authRoutes = require('./routes/auth.js');
+const settingsRoutes = require('./routes/settings.js');
+const notFoundRoute = require('./routes/notFound.js');
 
 const app = express();
 const PORT = constData.WEBPORT;
@@ -34,12 +39,6 @@ async function main() {
 
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'ejs');
-
-    // Routes
-    const indexRoutes = require('./routes/index');
-    const authRoutes = require('./routes/auth.js');
-    const settingsRoutes = require('./routes/settings.js');
-    const notFoundRoute = require('./routes/notFound.js');
 
     app.use('/', indexRoutes);
     app.use('/', authRoutes);
